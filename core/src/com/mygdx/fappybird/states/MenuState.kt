@@ -11,6 +11,7 @@ class MenuState(var gameStateManager: GameStateManager) : State(gameStateManager
     internal var playBtn: Texture
 
     init {
+        cam.setToOrtho(false, WIDTH / 2f, HEIGHT / 2f)
         background = Texture("bg.png")
         playBtn = Texture("playbtn.png")
     }
@@ -18,7 +19,6 @@ class MenuState(var gameStateManager: GameStateManager) : State(gameStateManager
     override fun handleInput() {
         if (Gdx.input.justTouched()) {
             gameStateManager.set(PlayState(gameStateManager))
-            dispose()
         }
     }
 
@@ -27,14 +27,16 @@ class MenuState(var gameStateManager: GameStateManager) : State(gameStateManager
     }
 
     override fun render(spriteBatch: SpriteBatch) {
+        spriteBatch.projectionMatrix = cam.combined
         spriteBatch.begin()
-        spriteBatch.draw(background, 0f, 0f, WIDTH.toFloat(), HEIGHT.toFloat())
-        spriteBatch.draw(playBtn, (WIDTH.toFloat() / 2) - (playBtn.width / 2), HEIGHT.toFloat() / 2)
+        spriteBatch.draw(background, 0f, 0f)
+        spriteBatch.draw(playBtn, cam.position.x - playBtn.width / 2, cam.position.y)
         spriteBatch.end()
     }
 
     override fun dispose() {
         background.dispose()
         playBtn.dispose()
+        println("Menu State Disposed")
     }
 }

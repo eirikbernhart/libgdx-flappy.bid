@@ -9,11 +9,13 @@ class GameStateManager {
     fun push(state: State) = states.push(state)
 
 
-    fun pop() = states.pop()
+    fun pop() {
+        states.pop().dispose()
+    }
 
 
     fun set(state: State) {
-        states.pop()
+        states.pop().dispose()
         states.push(state)
     }
 

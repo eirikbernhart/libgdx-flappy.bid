@@ -18,7 +18,6 @@ class PlayState(gsm: GameStateManager) : State(gsm) {
     private val ground: Texture
     private val groundPos1: Vector2
     private val groundPos2: Vector2
-
     private val tubes: Array<Tube>
 
     init {
@@ -51,18 +50,19 @@ class PlayState(gsm: GameStateManager) : State(gsm) {
 
         for (i in 0 until tubes.size) {
             val tube = tubes.get(i)
-
-            if (cam.position.x - cam.viewportWidth / 2 > tube.posTopTube.x + tube.topTube.getWidth()) {
+            if (cam.position.x - cam.viewportWidth / 2 > tube.posTopTube.x + tube.topTube.width) {
                 tube.reposition(tube.posTopTube.x + (Tube.TUBE_WIDTH + TUBE_SPACING) * TUBE_COUNT)
             }
 
-
+            if (tube.collides(bird.getBounds())) {
+                gsm.set(MenuState(gsm))
+            }
         }
 
-        if (bird.position.y <= ground.height + GROUND_Y_OFFSET)
+        if (bird.position.y <= ground.height + GROUND_Y_OFFSET) {
             gsm.set(MenuState(gsm))
+        }
         cam.update()
-
     }
 
     override fun render(sb: SpriteBatch) {
